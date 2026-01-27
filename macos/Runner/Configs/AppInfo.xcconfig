@@ -8,7 +8,7 @@
 PRODUCT_NAME = jump_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = org.s2mlab.jumpApp
+PRODUCT_BUNDLE_IDENTIFIER = org.s2mlab.jump-app
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 S2MLab. All rights reserved.
