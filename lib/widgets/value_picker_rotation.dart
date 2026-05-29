@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-import '/providers/app_parameters.dart';
+import '../helpers/math_helper.dart';
+import '../providers/app_parameters.dart';
 import 'mixed_tooptip.dart';
 import 'numeric_value_editor.dart';
 
@@ -41,22 +42,20 @@ class ValuePickerRotation extends StatelessWidget {
   final TextStyle textStyle;
   final ValueChanged<double>? onChange;
 
-  double get _displayedMin => DisplayValue.minimum(min, precision);
-  double get _displayedMax => DisplayValue.maximum(max, precision);
-  double get _displayedValue => DisplayValue.canonical(
-        value,
+  double get _displayedMin => MathHelper.minimum(min, precision);
+  double get _displayedMax => MathHelper.maximum(max, precision);
+  double get _displayedValue =>
+      MathHelper.canonical(value, min: min, max: max, precision: precision);
+
+  void _changeValue(ValueChangingArgs valueChanging) {
+    onChange?.call(
+      MathHelper.canonical(
+        valueChanging.value.toDouble(),
         min: min,
         max: max,
         precision: precision,
-      );
-
-  void _changeValue(ValueChangingArgs valueChanging) {
-    onChange?.call(DisplayValue.canonical(
-      valueChanging.value.toDouble(),
-      min: min,
-      max: max,
-      precision: precision,
-    ));
+      ),
+    );
   }
 
   Future<void> _editValue(BuildContext context) async {
@@ -84,7 +83,8 @@ class ValuePickerRotation extends StatelessWidget {
         alignment: Alignment.bottomLeft,
         children: [
           Positioned(
-            right: deviceSize.width -
+            right:
+                deviceSize.width -
                 position.dx -
                 deviceSize.width * 0.04 -
                 textOffset.dx,
@@ -123,7 +123,9 @@ class ValuePickerRotation extends StatelessWidget {
                     showTicks: false,
                     radiusFactor: 1,
                     axisLineStyle: AxisLineStyle(
-                        thickness: trackWidth, color: color.withAlpha(50)),
+                      thickness: trackWidth,
+                      color: color.withAlpha(50),
+                    ),
                     minimum: _displayedMin,
                     maximum: _displayedMax,
                     pointers: [
@@ -135,7 +137,7 @@ class ValuePickerRotation extends StatelessWidget {
                         value: _displayedValue,
                         onValueChanging: _changeValue,
                         enableDragging: true,
-                      )
+                      ),
                     ],
                     ranges: [
                       GaugeRange(

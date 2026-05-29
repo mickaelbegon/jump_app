@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-import '/providers/app_parameters.dart';
+import '../providers/app_parameters.dart';
+import '../helpers/math_helper.dart';
 import 'mixed_tooptip.dart';
 import 'numeric_value_editor.dart';
 
@@ -90,22 +91,20 @@ class ValuePicker extends StatelessWidget {
 
   final ValueChanged<double>? onValueChanged;
 
-  double get _displayedMin => DisplayValue.minimum(min, precision);
-  double get _displayedMax => DisplayValue.maximum(max, precision);
-  double get _displayedValue => DisplayValue.canonical(
-        value,
+  double get _displayedMin => MathHelper.minimum(min, precision);
+  double get _displayedMax => MathHelper.maximum(max, precision);
+  double get _displayedValue =>
+      MathHelper.canonical(value, min: min, max: max, precision: precision);
+
+  void _onChanged(dynamic value) {
+    onValueChanged?.call(
+      MathHelper.canonical(
+        (value as num).toDouble(),
         min: min,
         max: max,
         precision: precision,
-      );
-
-  void _onChanged(dynamic value) {
-    onValueChanged?.call(DisplayValue.canonical(
-      (value as num).toDouble(),
-      min: min,
-      max: max,
-      precision: precision,
-    ));
+      ),
+    );
   }
 
   Future<void> _editValue(BuildContext context) async {
@@ -144,16 +143,14 @@ class ValuePicker extends StatelessWidget {
     }
 
     return Positioned(
-        left: 0,
-        bottom: 0,
-        child: SizedBox(
-          height: deviceSize.height,
-          width: deviceSize.width,
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            children: children,
-          ),
-        ));
+      left: 0,
+      bottom: 0,
+      child: SizedBox(
+        height: deviceSize.height,
+        width: deviceSize.width,
+        child: Stack(alignment: Alignment.bottomLeft, children: children),
+      ),
+    );
   }
 
   List<Widget> _buildHorizontal(BuildContext context, Size deviceSize) {
@@ -161,17 +158,19 @@ class ValuePicker extends StatelessWidget {
 
     return [
       Positioned(
-          left: position.dx + textOffset.dx,
-          right: deviceSize.width - width! - position.dx - textOffset.dx,
-          bottom: position.dy + textOffset.dy,
-          top: deviceSize.height - position.dy - fontSize * 2.3 - textOffset.dy,
-          child: _buildText(context)),
+        left: position.dx + textOffset.dx,
+        right: deviceSize.width - width! - position.dx - textOffset.dx,
+        bottom: position.dy + textOffset.dy,
+        top: deviceSize.height - position.dy - fontSize * 2.3 - textOffset.dy,
+        child: _buildText(context),
+      ),
       Positioned(
-          left: position.dx,
-          right: deviceSize.width - width! - position.dx,
-          bottom: position.dy,
-          top: deviceSize.height - position.dy - deviceSize.width * 0.010,
-          child: _buildSlider(context)),
+        left: position.dx,
+        right: deviceSize.width - width! - position.dx,
+        bottom: position.dy,
+        top: deviceSize.height - position.dy - deviceSize.width * 0.010,
+        child: _buildSlider(context),
+      ),
     ];
   }
 
@@ -232,7 +231,7 @@ class ValuePicker extends StatelessWidget {
             ? SfSlider.vertical(
                 min: _displayedMin,
                 max: _displayedMax,
-                stepSize: DisplayValue.step(precision),
+                stepSize: MathHelper.step(precision),
                 activeColor: color,
                 inactiveColor: color.withAlpha(50),
                 value: _displayedValue,
@@ -241,7 +240,7 @@ class ValuePicker extends StatelessWidget {
             : SfSlider(
                 min: _displayedMin,
                 max: _displayedMax,
-                stepSize: DisplayValue.step(precision),
+                stepSize: MathHelper.step(precision),
                 activeColor: color,
                 inactiveColor: color.withAlpha(50),
                 value: _displayedValue,

@@ -1,41 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-import '/providers/locale_text.dart';
-
-class DisplayValue {
-  const DisplayValue._();
-
-  static double step(int precision) => pow(10, -precision).toDouble();
-
-  static double roundToPrecision(double value, int precision) {
-    final scale = pow(10, precision).toDouble();
-    return (value * scale).round() / scale;
-  }
-
-  static double minimum(double value, int precision) {
-    final scale = pow(10, precision).toDouble();
-    return (value * scale).ceil() / scale;
-  }
-
-  static double maximum(double value, int precision) {
-    final scale = pow(10, precision).toDouble();
-    return (value * scale).floor() / scale;
-  }
-
-  static double canonical(
-    double value, {
-    required double min,
-    required double max,
-    required int precision,
-  }) {
-    final displayedMin = minimum(min, precision);
-    final displayedMax = maximum(max, precision);
-    final bounded = value.clamp(displayedMin, displayedMax).toDouble();
-    return roundToPrecision(bounded, precision);
-  }
-}
+import '../helpers/math_helper.dart';
+import '../providers/locale_text.dart';
 
 Future<double?> showNumericValueEditor(
   BuildContext context, {
@@ -81,16 +47,14 @@ class _NumericValueEditorDialogState extends State<_NumericValueEditorDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _controller;
 
-  double get _displayedMin =>
-      DisplayValue.minimum(widget.min, widget.precision);
-  double get _displayedMax =>
-      DisplayValue.maximum(widget.max, widget.precision);
+  double get _displayedMin => MathHelper.minimum(widget.min, widget.precision);
+  double get _displayedMax => MathHelper.maximum(widget.max, widget.precision);
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(
-      text: DisplayValue.canonical(
+      text: MathHelper.canonical(
         widget.initialValue,
         min: widget.min,
         max: widget.max,
@@ -118,7 +82,7 @@ class _NumericValueEditorDialogState extends State<_NumericValueEditorDialog> {
     if (!_formKey.currentState!.validate()) return;
     Navigator.pop(
       context,
-      DisplayValue.canonical(
+      MathHelper.canonical(
         double.parse(_controller.text.trim().replaceAll(',', '.')),
         min: widget.min,
         max: widget.max,

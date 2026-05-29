@@ -29,15 +29,21 @@ class MixedTooltip extends StatelessWidget {
     helperCallback() => showHelp(context, title: helpTitle, content: helpText);
 
     return Tooltip(
-      triggerMode:
-          onEditTap != null ? TooltipTriggerMode.manual : TooltipTriggerMode.tap,
+      triggerMode: onEditTap != null
+          ? TooltipTriggerMode.manual
+          : TooltipTriggerMode.tap,
       message: message,
       child: hasHelp || onEditTap != null
-          ? GestureDetector(
-              onTap: onEditTap ?? (!isPhone && hasHelp ? helperCallback : null),
-              onLongPress:
-                  hasHelp && (onEditTap != null || isPhone) ? helperCallback : null,
-              child: child,
+          ? MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap:
+                    onEditTap ?? (!isPhone && hasHelp ? helperCallback : null),
+                onLongPress: hasHelp && (onEditTap != null || isPhone)
+                    ? helperCallback
+                    : null,
+                child: child,
+              ),
             )
           : child,
     );

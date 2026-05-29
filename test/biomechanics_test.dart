@@ -27,7 +27,7 @@ void main() {
     test('updates preserve displayed units for every editable scalar', () {
       final biomechanics = Biomechanics(JumpDescription.axel.bounds.initial);
 
-      biomechanics.initialHeigh = 1.236;
+      biomechanics.initialHeight = 1.236;
       biomechanics.finalHeight = 1.244;
       biomechanics.initialInertia = 2.126;
       biomechanics.minimumInertia = 0.756;
@@ -80,7 +80,7 @@ void main() {
 
     test('easy mode makes the landing height follow takeoff height', () {
       final biomechanics = Biomechanics(JumpDescription.axel.bounds.initial);
-      biomechanics.initialHeigh = 1.27;
+      biomechanics.initialHeight = 1.27;
       biomechanics.finalHeight = 1.08;
 
       expect(biomechanics.finalHeight, 1.08);
