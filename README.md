@@ -94,9 +94,35 @@ Pour préparer un fichier IPA :
 flutter build ipa
 ```
 
-La distribution finale se poursuit dans Xcode avec un certificat de
-distribution et un profil Apple valides, puis avec Transporter pour envoyer
-le build à App Store Connect.
+Il est possible que la commande s'arrête à la fin si l'environnement local ne
+peut pas terminer la distribution automatiquement. Dans ce cas, suivre le lien
+affiché dans la console pour ouvrir Xcode.
+
+Dans Xcode :
+
+1. cliquer sur `Distribute App`;
+2. sélectionner `Custom`;
+3. sélectionner `App Store Connect`;
+4. sélectionner `Export`;
+5. vérifier que seule l'option `TestFlight internal testing only` n'est pas
+   cochée;
+6. sélectionner `Manually manage signing`;
+7. choisir le certificat de distribution et le profil de provisionnement Apple;
+8. cliquer sur `Export` et choisir un dossier de sortie.
+
+Le certificat de distribution et le profil de provisionnement doivent être
+valides pour l'application. Si vous ne les avez pas, les demander à un membre
+de l'équipe ou les générer dans le portail Apple Developer / App Store Connect,
+section `Certificates, Identifiers & Profiles`.
+
+Une fois le fichier exporté, utiliser l'application `Transporter` pour envoyer
+le build vers App Store Connect.
+
+Apple envoie généralement un courriel environ 5 à 10 minutes après le
+téléversement. Ce courriel indique si le build a été accepté ou refusé. En cas
+d'échec, le build n'apparaît pas dans App Store Connect : corriger les erreurs,
+recompiler et recommencer. En cas de succès, le build apparaît dans la liste
+des builds et peut être sélectionné pour soumission à la revue.
 
 ## Contact
 
